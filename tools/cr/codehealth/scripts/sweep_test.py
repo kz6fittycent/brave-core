@@ -225,6 +225,29 @@ class RulesTest(unittest.TestCase):
         )
         self.assertEqual(['components/sync/base/features.cc'], flips)
 
+    def test_feature_removal_skips_platform_unit_tests(self):
+        self.enterContext(
+            mock.patch.object(knowledge_base, 'brave_tree', FakeBrave)
+        )
+        base = knowledge_base.KnowledgeBase(sweep.RULES_DIR / 'defaults')
+        rule = (
+            'tools/cr/codehealth/rules/defaults/'
+            'upstream-removes-feature-brave-keeps.md'
+        )
+        for path, listed in (
+            ('chrome/browser/a/a.cc', True),
+            ('chrome/browser/a/a_unittest.cc', False),
+            ('chrome/browser/a/a_unittest_win.cc', False),
+        ):
+            change = Change.parse(
+                f'diff --git a/{path} b/{path}\n'
+                '@@ -1 +1,2 @@\n'
+                '+  base::DeletePathRecursively(dir);\n'
+            )
+            self.assertEqual(
+                listed, rule in {m.rule.path for m in base.match(change)}, path
+            )
+
     def test_warning_opt_outs_list_removed_flags_and_configs(self):
         self.enterContext(
             mock.patch.object(knowledge_base, 'brave_tree', FakeBrave)

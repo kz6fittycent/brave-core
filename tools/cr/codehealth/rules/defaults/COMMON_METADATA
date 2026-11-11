@@ -166,7 +166,7 @@ agentic_review {
   # adds to wipe the feature's data on startup.
   capability_groups {
     path_expression: ".*\\.(?:cc|mm)"
-    path_expression_exclusion: ".*(?:_unittest|_browsertest|_test|_uitest|_test_util|_test_utils|_fuzzer|_perftest)\\.(?:cc|mm)|.*/test/.*|.*/testing/.*"
+    path_expression_exclusion: ".*(?:_unittest|_browsertest|_test|_uitest|_test_util|_test_utils|_fuzzer|_perftest)(?:_(?:win|mac|linux|android|ios|posix))?\\.(?:cc|mm)|.*/test/.*|.*/testing/.*"
     diff_patterns: "^\\+.*(?:sql::Database::Delete|DeletePathRecursively|ClearPref\\(|(?i:delete (?:the )?(?:residual|deprecated|obsolete)))"
     rules: "tools/cr/codehealth/rules/defaults/upstream-removes-feature-brave-keeps.md"
   }
