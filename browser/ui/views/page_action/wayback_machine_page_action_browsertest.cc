@@ -3,6 +3,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this file,
 // You can obtain one at https://mozilla.org/MPL/2.0/.
 
+#include <utility>
 #include <vector>
 
 #include "base/functional/bind.h"
@@ -26,10 +27,15 @@
 #include "chrome/browser/resource_coordinator/tab_lifecycle_unit_source.h"
 #include "chrome/browser/ui/actions/chrome_action_id.h"
 #include "chrome/browser/ui/browser_commands.h"
+#include "chrome/browser/ui/browser_window/public/browser_window_interface.h"
 #include "chrome/browser/ui/tabs/tab_strip_model.h"
 #include "chrome/browser/ui/views/page_action/page_action_view.h"
 #include "chrome/browser/ui/views/page_action/test_support/page_action_test_accessor.h"
 #include "chrome/test/base/in_process_browser_test.h"
+#include "chrome/test/base/ui_test_utils.h"
+#include "components/infobars/content/content_infobar_manager.h"
+#include "components/infobars/core/infobar.h"
+#include "components/infobars/core/infobar_delegate.h"
 #include "components/prefs/pref_service.h"
 #include "components/tabs/public/tab_interface.h"
 #include "content/public/browser/web_contents.h"
@@ -41,6 +47,8 @@
 #include "ui/events/base_event_utils.h"
 #include "ui/events/event.h"
 #include "ui/events/event_constants.h"
+#include "ui/gfx/animation/animation.h"
+#include "ui/gfx/animation/animation_test_api.h"
 #include "ui/gfx/geometry/point.h"
 #include "ui/views/controls/button/md_text_button.h"
 #include "ui/views/controls/throbber.h"
@@ -518,6 +526,301 @@ IN_PROC_BROWSER_TEST_F(WaybackMachineAutoShowBubbleBrowserTest,
 
   browser()->tab_strip_model()->ActivateTabAt(0);
   EXPECT_EQ(GetBubbleView(), nullptr);
+}
+
+class WaybackMachineAutoCheckBrowserTest
+    : public WaybackMachinePageActionBrowserTest {
+ public:
+  WaybackMachineAutoCheckBrowserTest() {
+    feature_list_.InitWithFeatures(
+        {brave_wayback_machine::features::kWaybackMachineAutoCheck,
+         brave_wayback_machine::features::kWaybackMachineAutoShowBubble},
+        {});
+  }
+
+ protected:
+  void EnableAutoCheckPref() {
+    browser()->GetProfile()->GetPrefs()->SetBoolean(
+        kBraveWaybackMachineAutoCheckEnabled, true);
+  }
+
+  void NavigateToTestURL(BrowserWindowInterface* target_browser,
+                         const GURL& url) {
+    content::URLLoaderInterceptor interceptor(base::BindLambdaForTesting(
+        [&](content::URLLoaderInterceptor::RequestParams* params) {
+          const GURL& request_url = params->url_request.url;
+          if (request_url.SchemeIsHTTPOrHTTPS() &&
+              request_url.host() == url.host() &&
+              request_url.path() == url.path()) {
+            content::URLLoaderInterceptor::WriteResponse(
+                "HTTP/1.1 200 OK\nContent-Type: text/html\n\n", "<html></html>",
+                params->client.get());
+            return true;
+          }
+          return false;
+        }));
+    ASSERT_TRUE(ui_test_utils::NavigateToURL(target_browser, url));
+  }
+
+  void ExpectAutoCheckSkipped(BrowserWindowInterface* target_browser,
+                              const GURL& url) {
+    bool wayback_requested = false;
+    content::URLLoaderInterceptor interceptor(base::BindLambdaForTesting(
+        [&](content::URLLoaderInterceptor::RequestParams* params) {
+          const GURL& request_url = params->url_request.url;
+          if (request_url.host() == GURL(kWaybackQueryURL).host()) {
+            wayback_requested = true;
+            return true;
+          }
+          if (request_url.SchemeIsHTTPOrHTTPS() &&
+              request_url.host() == url.host() &&
+              request_url.path() == url.path()) {
+            content::URLLoaderInterceptor::WriteResponse(
+                "HTTP/1.1 200 OK\nContent-Type: text/html\n\n", "<html></html>",
+                params->client.get());
+            return true;
+          }
+          return false;
+        }));
+
+    ASSERT_TRUE(ui_test_utils::NavigateToURL(target_browser, url));
+    auto* tab = target_browser->GetActiveTabInterface();
+    ASSERT_NE(tab, nullptr);
+    auto* tab_helper = BraveWaybackMachineTabHelper::From(tab);
+    ASSERT_NE(tab_helper, nullptr);
+
+    tab_helper->SetWaybackStateForTesting(WaybackState::kNeedToCheck);
+    EXPECT_EQ(tab_helper->wayback_state(), WaybackState::kNeedToCheck);
+    EXPECT_FALSE(wayback_requested);
+    EXPECT_EQ(GetWaybackInfoBar(tab->GetContents()), nullptr);
+  }
+
+  infobars::InfoBar* GetWaybackInfoBar(content::WebContents* contents) {
+    auto* manager = infobars::ContentInfoBarManager::FromWebContents(contents);
+    if (!manager) {
+      return nullptr;
+    }
+    for (infobars::InfoBar* infobar : manager->infobars()) {
+      if (infobar->delegate()->GetIdentifier() ==
+          infobars::InfoBarDelegate::BRAVE_WAYBACK_MACHINE_INFOBAR_DELEGATE) {
+        return infobar;
+      }
+    }
+    return nullptr;
+  }
+
+  infobars::InfoBar* GetActiveWaybackInfoBar() {
+    return GetWaybackInfoBar(
+        browser()->tab_strip_model()->GetActiveWebContents());
+  }
+
+ private:
+  gfx::AnimationTestApi::RenderModeResetter disable_rich_animations_ =
+      gfx::AnimationTestApi::SetRichAnimationRenderMode(
+          gfx::Animation::RichAnimationRenderMode::FORCE_DISABLED);
+  base::test::ScopedFeatureList feature_list_;
+};
+
+IN_PROC_BROWSER_TEST_F(WaybackMachineAutoCheckBrowserTest, DoesNotAutoCheck) {
+  {
+    SCOPED_TRACE("pref disabled");
+    NavigateToTestURL(browser(), GURL("https://example.com/page"));
+    SetWaybackState(WaybackState::kNeedToCheck);
+
+    EXPECT_EQ(GetTabHelper()->wayback_state(), WaybackState::kNeedToCheck);
+    EXPECT_EQ(GetActiveWaybackInfoBar(), nullptr);
+    EXPECT_NE(GetBubbleView(), nullptr);
+
+    SetWaybackState(WaybackState::kInitial);
+    ASSERT_TRUE(base::test::RunUntil([&] { return !GetBubbleView(); }));
+  }
+
+  EnableAutoCheckPref();
+
+  {
+    SCOPED_TRACE("inactive tab");
+    content::WebContents* first_tab =
+        browser()->tab_strip_model()->GetActiveWebContents();
+    ASSERT_TRUE(
+        AddTabAtIndex(1, GURL("about:blank"), ui::PAGE_TRANSITION_TYPED));
+    ASSERT_EQ(1, browser()->tab_strip_model()->active_index());
+
+    auto* first_tab_helper = BraveWaybackMachineTabHelper::From(
+        tabs::TabInterface::MaybeGetFromContents(first_tab));
+    first_tab_helper->SetWaybackStateForTesting(WaybackState::kNeedToCheck);
+
+    EXPECT_EQ(first_tab_helper->wayback_state(), WaybackState::kNeedToCheck);
+    EXPECT_EQ(GetWaybackInfoBar(first_tab), nullptr);
+
+    browser()->tab_strip_model()->ActivateTabAt(0);
+    SetWaybackState(WaybackState::kInitial);
+  }
+
+  {
+    SCOPED_TRACE("incognito window");
+    BrowserWindowInterface* incognito_browser = CreateIncognitoBrowser();
+    ASSERT_TRUE(incognito_browser->GetProfile()->GetPrefs()->GetBoolean(
+        kBraveWaybackMachineAutoCheckEnabled));
+    ExpectAutoCheckSkipped(incognito_browser, GURL("https://example.com/page"));
+  }
+
+  {
+    SCOPED_TRACE("query URL");
+    ExpectAutoCheckSkipped(browser(),
+                           GURL("https://example.com/page?token=secret"));
+  }
+
+  {
+    SCOPED_TRACE("credentials URL");
+    ExpectAutoCheckSkipped(browser(),
+                           GURL("https://user:pass@example.com/page"));
+  }
+
+  {
+    SCOPED_TRACE("private IP URL");
+    ExpectAutoCheckSkipped(browser(), GURL("http://192.168.1.1/page"));
+  }
+
+  {
+    SCOPED_TRACE("single-label URL");
+    ExpectAutoCheckSkipped(browser(), GURL("http://intranet/page"));
+  }
+}
+
+IN_PROC_BROWSER_TEST_F(WaybackMachineAutoCheckBrowserTest,
+                       AutoCheckAndInfoBarLifecycle) {
+  bool return_snapshot = false;
+  const GURL page_url("https://example.com/page");
+  content::URLLoaderInterceptor interceptor(base::BindLambdaForTesting(
+      [&](content::URLLoaderInterceptor::RequestParams* params) {
+        const GURL& request_url = params->url_request.url;
+        if (request_url.host() == GURL(kWaybackQueryURL).host()) {
+          content::URLLoaderInterceptor::WriteResponse(
+              "HTTP/1.1 200 OK\nContent-Type: application/json\n\n",
+              return_snapshot
+                  ? base::StrCat(
+                        {R"({"archived_snapshots":{"closest":{"url":")",
+                         kSnapshotURL, R"("}}})"})
+                  : "{}",
+              params->client.get());
+          return true;
+        }
+        if (request_url == page_url) {
+          content::URLLoaderInterceptor::WriteResponse(
+              "HTTP/1.1 200 OK\nContent-Type: text/html\n\n", "<html></html>",
+              params->client.get());
+          return true;
+        }
+        return false;
+      }));
+
+  ASSERT_TRUE(ui_test_utils::NavigateToURL(browser(), page_url));
+  EnableAutoCheckPref();
+
+  {
+    SCOPED_TRACE("not available");
+    SetWaybackState(WaybackState::kNeedToCheck);
+
+    ASSERT_TRUE(base::test::RunUntil([&] {
+      return GetTabHelper()->wayback_state() == WaybackState::kNotAvailable;
+    }));
+    EXPECT_TRUE(GetIcon().GetVisible());
+    EXPECT_EQ(GetActiveWaybackInfoBar(), nullptr);
+    EXPECT_EQ(GetBubbleView(), nullptr);
+  }
+
+  return_snapshot = true;
+  SetWaybackState(WaybackState::kInitial);
+
+  {
+    SCOPED_TRACE("found shows infobar and reset removes it");
+    SetWaybackState(WaybackState::kNeedToCheck);
+
+    EXPECT_EQ(GetBubbleView(), nullptr);
+    ASSERT_TRUE(base::test::RunUntil([&] {
+      return GetTabHelper()->wayback_state() == WaybackState::kFound;
+    }));
+    EXPECT_NE(GetActiveWaybackInfoBar(), nullptr);
+    EXPECT_EQ(GetBubbleView(), nullptr);
+
+    SetWaybackState(WaybackState::kInitial);
+    EXPECT_TRUE(
+        base::test::RunUntil([&] { return !GetActiveWaybackInfoBar(); }));
+  }
+
+  {
+    SCOPED_TRACE("deactivating tab removes infobar");
+    content::WebContents* first_tab =
+        browser()->tab_strip_model()->GetActiveWebContents();
+    SetWaybackState(WaybackState::kNeedToCheck);
+    ASSERT_TRUE(
+        base::test::RunUntil([&] { return GetWaybackInfoBar(first_tab); }));
+
+    ASSERT_TRUE(
+        AddTabAtIndex(1, GURL("about:blank"), ui::PAGE_TRANSITION_TYPED));
+    EXPECT_TRUE(
+        base::test::RunUntil([&] { return !GetWaybackInfoBar(first_tab); }));
+
+    browser()->tab_strip_model()->ActivateTabAt(0);
+    EXPECT_EQ(GetTabHelper()->wayback_state(), WaybackState::kFound);
+    EXPECT_EQ(GetActiveWaybackInfoBar(), nullptr);
+  }
+}
+
+IN_PROC_BROWSER_TEST_F(WaybackMachineAutoCheckBrowserTest,
+                       OpeningBubbleRemovesInfoBarAndCancelsPendingInfoBar) {
+  NavigateToTestURL(browser(), GURL("https://example.com/page"));
+  bool hold_response = false;
+  content::URLLoaderInterceptor::RequestParams pending_request;
+  content::URLLoaderInterceptor interceptor(base::BindLambdaForTesting(
+      [&](content::URLLoaderInterceptor::RequestParams* params) {
+        if (params->url_request.url.host() != GURL(kWaybackQueryURL).host()) {
+          return false;
+        }
+        if (hold_response) {
+          pending_request = std::move(*params);
+          return true;
+        }
+        content::URLLoaderInterceptor::WriteResponse(
+            "HTTP/1.1 200 OK\nContent-Type: application/json\n\n",
+            base::StrCat({R"({"archived_snapshots":{"closest":{"url":")",
+                          kSnapshotURL, R"("}}})"}),
+            params->client.get());
+        return true;
+      }));
+
+  EnableAutoCheckPref();
+  SetWaybackState(WaybackState::kNeedToCheck);
+  ASSERT_TRUE(base::test::RunUntil([&] { return GetActiveWaybackInfoBar(); }));
+
+  WaybackMachineBubbleView* bubble = ClickIconAndGetBubble();
+  ASSERT_NE(bubble, nullptr);
+  ExpectFoundUI(bubble);
+  EXPECT_TRUE(base::test::RunUntil([&] { return !GetActiveWaybackInfoBar(); }));
+
+  SetWaybackState(WaybackState::kInitial);
+  ASSERT_TRUE(base::test::RunUntil([&] { return !GetBubbleView(); }));
+
+  hold_response = true;
+  SetWaybackState(WaybackState::kNeedToCheck);
+  ASSERT_EQ(GetTabHelper()->wayback_state(), WaybackState::kFetching);
+  ASSERT_TRUE(
+      base::test::RunUntil([&] { return pending_request.client.is_bound(); }));
+
+  bubble = ClickIconAndGetBubble();
+  ASSERT_NE(bubble, nullptr);
+  ExpectFetchingUI(bubble);
+
+  content::URLLoaderInterceptor::WriteResponse(
+      "HTTP/1.1 200 OK\nContent-Type: application/json\n\n",
+      base::StrCat({R"({"archived_snapshots":{"closest":{"url":")",
+                    kSnapshotURL, R"("}}})"}),
+      pending_request.client.get());
+  ASSERT_TRUE(base::test::RunUntil(
+      [&] { return GetTabHelper()->wayback_state() == WaybackState::kFound; }));
+
+  ExpectFoundUI(bubble);
+  EXPECT_EQ(GetActiveWaybackInfoBar(), nullptr);
 }
 
 }  // namespace page_actions
