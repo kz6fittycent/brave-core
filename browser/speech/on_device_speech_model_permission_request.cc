@@ -10,7 +10,6 @@
 
 #include "base/check.h"
 #include "base/functional/bind.h"
-#include "brave/components/local_ai/core/on_device_speech_models_state.h"
 #include "brave/components/local_ai/core/pref_names.h"
 #include "brave/grit/brave_generated_resources.h"
 #include "components/permissions/permission_decision.h"
@@ -19,7 +18,6 @@
 #include "components/permissions/request_type.h"
 #include "components/prefs/pref_service.h"
 #include "ui/base/l10n/l10n_util.h"
-#include "ui/base/text/bytes_formatting.h"
 
 namespace speech {
 
@@ -45,9 +43,8 @@ OnDeviceSpeechModelPermissionRequest::~OnDeviceSpeechModelPermissionRequest() =
 
 std::u16string OnDeviceSpeechModelPermissionRequest::GetMessageTextFragment()
     const {
-  return l10n_util::GetStringFUTF16(
-      IDS_ON_DEVICE_SPEECH_MODEL_PERMISSION_FRAGMENT,
-      ui::FormatBytes(local_ai::kApproxModelSize));
+  return l10n_util::GetStringUTF16(
+      IDS_ON_DEVICE_SPEECH_MODEL_PERMISSION_FRAGMENT);
 }
 
 void OnDeviceSpeechModelPermissionRequest::PermissionDecided(

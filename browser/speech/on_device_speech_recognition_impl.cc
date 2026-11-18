@@ -73,8 +73,8 @@ void OnPromptAnswered(
     std::move(callback).Run(false);
     return;
   }
-  g_browser_process->local_state()->SetBoolean(
-      local_ai::prefs::kOnDeviceSpeechEnglishModelEnabled, true);
+  local_ai::EnableOnDeviceSpeechModel(*g_browser_process->local_state(),
+                                      local_ai::OnDeviceSpeechModel::kEnglish);
   std::move(install).Run(std::move(callback));
 }
 
