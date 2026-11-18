@@ -14,9 +14,24 @@ substitutions:
 
   - description: |-
       Virtualise GetSeparatorBounds for BraveVerticalTabStyle.
-    make_virtual:
-      class_name: HorizontalTabStyleViews
-      method_name: GetSeparatorBounds
+
+      Only the instance overload; the static one shares its name.
+    regex:
+      pattern:
+        'TabStyle::SeparatorBounds GetSeparatorBounds(float scale) const;'
+      replace:
+        'virtual TabStyle::SeparatorBounds GetSeparatorBounds(float scale)
+        const;'
+
+  - description: |-
+      Virtualise PaintSeparators for BraveVerticalTabStyle.
+
+      Upstream paints separators through a static overload that computes its
+      own bounds, so BraveVerticalTabStyle paints them itself to use its
+      separator bounds. Only the instance overload is virtualised.
+    regex:
+      pattern: 'void PaintSeparators(gfx::Canvas* canvas) const;'
+      replace: 'virtual void PaintSeparators(gfx::Canvas* canvas) const;'
 
   - description: |-
       Virtualise IsHovering for BraveVerticalTabStyle.
