@@ -19,6 +19,5 @@ struct BraveWidgets: WidgetBundle {
     LockScreenFavoriteWidget()
     BraveSearchControlWidget()
     AskBraveControlWidget()
-    ShortcutControlWidget()
   }
 }

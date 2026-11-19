@@ -6,23 +6,27 @@
 import AppIntents
 import UIKit
 
+// WidgetShortcut is generated as an `@objc` enum, so a checked `Sendable` conformance
+// cannot be added outside that file. The cases are a trivial `Int`.
+extension WidgetShortcut: @unchecked Sendable {}
+
 @available(iOS 26.0, *)
 public struct OpenControlWidgetShortcutIntent: UISceneAppIntent {
   public static let title: LocalizedStringResource = "Open Brave"
   public static let openAppWhenRun: Bool = true
-  public static let isDiscoverable: Bool = false
 
-  @Parameter(title: "Shortcut")
-  public var shortcutOption: ShortcutOption
+  public var shortcut: WidgetShortcut
 
-  public init() {}
+  public init() {
+    self.shortcut = .unknown
+  }
 
-  public init(shortcut: ShortcutOption) {
-    self.shortcutOption = shortcut
+  public init(shortcut: WidgetShortcut) {
+    self.shortcut = shortcut
   }
 }
 
-/// Static Search control. Control Center restores an intent with `init()`, so the intent type is the shortcut.
+/// Static Search control. Control Center restores an intent with `init()` and does not keep a stored shortcut, so the intent type is the shortcut.
 @available(iOS 26.0, *)
 public struct OpenBraveSearchControlIntent: UISceneAppIntent {
   public static let title: LocalizedStringResource = "Brave Search"
