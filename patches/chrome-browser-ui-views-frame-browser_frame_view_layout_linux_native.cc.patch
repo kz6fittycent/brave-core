@@ -1,0 +1,12 @@
+diff --git a/chrome/browser/ui/views/frame/browser_frame_view_layout_linux_native.cc b/chrome/browser/ui/views/frame/browser_frame_view_layout_linux_native.cc
+index ad415957267d28e46daf0ae3308a39fb355d1431..b7abf78ffba36277110d86f71ca9834999117f86 100644
+--- a/chrome/browser/ui/views/frame/browser_frame_view_layout_linux_native.cc
++++ b/chrome/browser/ui/views/frame/browser_frame_view_layout_linux_native.cc
+@@ -182,6 +182,7 @@ void BrowserFrameViewLayoutLinuxNative::LayoutTitleBar(views::View* host) {
+ }
+ 
+ bool BrowserFrameViewLayoutLinuxNative::ShouldUseNativeHeaderBar() const {
++  if (delegate_->IsToolbarVisible()) return false;
+   return !delegate_->IsTabStripVisible() &&
+          delegate_->WebAppButtonHeight() == 0 &&
+          !delegate_->GetUnframedModeEnabled();
