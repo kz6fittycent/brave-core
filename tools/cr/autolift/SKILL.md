@@ -685,7 +685,10 @@ rule. Recipes for what it leaves:
   change. A plain `fixup!` written on top of a later branch commit touching the
   same files (cr159: the Gerrit upload recipe's) is requeued after that commit
   the same way, then dropped from its first place with `brockit rebase --skip`;
-  check that the tip's files match the pre-rebase tip's.
+  check that the tip's files match the pre-rebase tip's. Don't requeue an
+  `amend!`: it would reword the later commit. Resolve its step to the hunks it
+  adds itself (cr160: a `site-list` test suite beside one a later commit adds),
+  and the later commit's conflict to `origin/cr<N>`'s version.
 - **A `fixup!` or later commit of a pinned group that conflicts in a file a
   later branch commit outside the group also changes** (cr159:
   `Disable failing upstream tests.` ahead of
