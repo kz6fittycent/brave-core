@@ -1,8 +1,8 @@
 diff --git a/chrome/browser/ui/views/tabs/common/root_tab_collection_node.cc b/chrome/browser/ui/views/tabs/common/root_tab_collection_node.cc
-index de8e433069e473e1666ad224c456e3dd6eb69409..c67dee134ff63fb23493747e2d289c4ef710a917 100644
+index 1b93dfcf7197852a01f50d7c1d9cb009c20e5c86..fb1edad75e8ea01d13deebc0dac12f70eeee073a 100644
 --- a/chrome/browser/ui/views/tabs/common/root_tab_collection_node.cc
 +++ b/chrome/browser/ui/views/tabs/common/root_tab_collection_node.cc
-@@ -199,6 +199,8 @@ void RootTabCollectionNode::OnTabStripModelChanged(
+@@ -257,6 +257,8 @@ void RootTabCollectionNode::OnTabStripModelChanged(
        changed_tabs.insert(selection.new_tab);
      }
      on_active_tab_changed_callback_list_.Notify(selection.new_tab);

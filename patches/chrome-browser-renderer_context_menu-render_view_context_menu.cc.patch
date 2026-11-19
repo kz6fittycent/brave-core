@@ -1,5 +1,5 @@
 diff --git a/chrome/browser/renderer_context_menu/render_view_context_menu.cc b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
-index 29a93791b91392c304f7965cd6d7305b978798e5..dff28ed1eb5359007aa33d54ef4c3e6893d26acf 100644
+index 3ab1aa38ce75c3420dbb0dc22abaa33c674257bc..6df5b19979d7e81d2ff2f3999cda353049ac60af 100644
 --- a/chrome/browser/renderer_context_menu/render_view_context_menu.cc
 +++ b/chrome/browser/renderer_context_menu/render_view_context_menu.cc
 @@ -452,8 +452,8 @@ constexpr int IDC_SPELLCHECK_LANGUAGES_LAST =
@@ -1708,7 +1708,7 @@ index 29a93791b91392c304f7965cd6d7305b978798e5..dff28ed1eb5359007aa33d54ef4c3e68
    const bool glic_below_search =
        base::FeatureList::IsEnabled(features::kGlicContextMenuBelowSearch);
    if (!params_.link_url.is_empty()) {
-@@ -6549,7 +6552,7 @@ void RenderViewContextMenu::AppendRevisedTextSelectionSection() {
+@@ -6547,7 +6550,7 @@ void RenderViewContextMenu::AppendRevisedTextSelectionSection() {
  
  #if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX) || \
      BUILDFLAG(IS_CHROMEOS)
@@ -1717,7 +1717,7 @@ index 29a93791b91392c304f7965cd6d7305b978798e5..dff28ed1eb5359007aa33d54ef4c3e68
    // Using `unfiltered_link_url`, because `link_url` is being replaced with
    // about:blank#blocked if the source is a normal site.
    return params_.unfiltered_link_url.has_scheme() &&
-@@ -6558,8 +6561,8 @@ bool RenderViewContextMenu::IsLinkToIsolatedWebApp() const {
+@@ -6556,8 +6559,8 @@ bool RenderViewContextMenu::IsLinkToIsolatedWebApp() const {
  #endif  // BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX) ||
          // BUILDFLAG(IS_CHROMEOS)
  
@@ -1728,7 +1728,7 @@ index 29a93791b91392c304f7965cd6d7305b978798e5..dff28ed1eb5359007aa33d54ef4c3e68
    if (!params_.image_replacement_frame_token.has_value()) {
      return std::nullopt;
    }
-@@ -6588,7 +6591,7 @@ RenderViewContextMenu::GetIndigoReplacementInfo() const {
+@@ -6586,7 +6589,7 @@ RenderViewContextMenu::GetIndigoReplacementInfo() const {
                                 replacement->GetReplacementImageURL()};
  }
  

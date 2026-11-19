@@ -1,5 +1,5 @@
 diff --git a/chrome/browser/optimization_guide/BUILD.gn b/chrome/browser/optimization_guide/BUILD.gn
-index bcf833e6acf81cac645770fd973ce3501369e2dc..11e2b90e75805fbccc3387227935a79e4475b044 100644
+index 839a42e3800766f596b5c1be254c9aac03699fa1..8cdad1b5d4be82f91f7c3d11b0233d2d3c034e23 100644
 --- a/chrome/browser/optimization_guide/BUILD.gn
 +++ b/chrome/browser/optimization_guide/BUILD.gn
 @@ -2,6 +2,8 @@

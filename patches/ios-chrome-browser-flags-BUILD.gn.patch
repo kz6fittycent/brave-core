@@ -1,5 +1,5 @@
 diff --git a/ios/chrome/browser/flags/BUILD.gn b/ios/chrome/browser/flags/BUILD.gn
-index 06844360b4519e27d32ff632068c9d303cf65ffe..7385d9fe7b66760c2bb0c0f907858db645a1e683 100644
+index c9e067007a73d829af5556b5768b98750b97534b..3ede5e58799b5086d5cc9ac1b5b23a98f4a1d11f 100644
 --- a/ios/chrome/browser/flags/BUILD.gn
 +++ b/ios/chrome/browser/flags/BUILD.gn
 @@ -2,6 +2,7 @@
@@ -10,7 +10,7 @@ index 06844360b4519e27d32ff632068c9d303cf65ffe..7385d9fe7b66760c2bb0c0f907858db6
  import("//ios/build/chrome_build.gni")
  
  source_set("flags") {
-@@ -131,6 +132,7 @@ source_set("flags") {
+@@ -130,6 +131,7 @@ source_set("flags") {
      "//ios/web/common:web_view_creation_util",
      "//ios/web/public",
    ]

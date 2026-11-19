@@ -1,8 +1,8 @@
 diff --git a/chrome/android/features/tab_ui/java/src/org/chromium/chrome/browser/tasks/tab_management/TabListMediator.java b/chrome/android/features/tab_ui/java/src/org/chromium/chrome/browser/tasks/tab_management/TabListMediator.java
-index f9bd89b86b91752cdb875c969094cae3f6047195..edde9a10cea2a6df2b3df23e75424af9d047dd3b 100644
+index a590a6016f152182232bc76822397e3f86ac41e2..cc9a7b2e52adb57330b1e725171d8c5d37c9e45a 100644
 --- a/chrome/android/features/tab_ui/java/src/org/chromium/chrome/browser/tasks/tab_management/TabListMediator.java
 +++ b/chrome/android/features/tab_ui/java/src/org/chromium/chrome/browser/tasks/tab_management/TabListMediator.java
-@@ -918,7 +918,7 @@ public class TabListMediator implements TabListNotificationHandler {
+@@ -920,7 +920,7 @@ public class TabListMediator implements TabListNotificationHandler {
                                  activity, assumeNonNull(modalDialogManager), onTabGroupCreation);
          String componentName = TabUiMetricsHelper.getComponentNameForMetrics(componentId);
          mTabGridItemTouchHelperCallback =

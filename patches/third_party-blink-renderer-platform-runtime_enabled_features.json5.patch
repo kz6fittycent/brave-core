@@ -1,5 +1,5 @@
 diff --git a/third_party/blink/renderer/platform/runtime_enabled_features.json5 b/third_party/blink/renderer/platform/runtime_enabled_features.json5
-index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0396faf22 100644
+index 22ad6c96fda1c0471e15eabdeb65a9256d45cb8b..bece0ce6d1672086342f819be6f4231b797e5bce 100644
 --- a/third_party/blink/renderer/platform/runtime_enabled_features.json5
 +++ b/third_party/blink/renderer/platform/runtime_enabled_features.json5
 @@ -185,6 +185,14 @@
@@ -45,7 +45,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
        copied_from_base_feature_if: "overridden",
      },
      {
-@@ -467,6 +480,8 @@
+@@ -473,6 +486,8 @@
      },
      {
        name: "AIPromptAPI",
@@ -54,7 +54,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
        public: true,
        status: {
          "Win": "stable",
-@@ -494,6 +509,8 @@
+@@ -500,6 +515,8 @@
      },
      {
        name: "AIPromptAPIMultimodalInput",
@@ -63,7 +63,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
        status: {
          "Win": "stable",
          "Mac": "stable",
-@@ -548,7 +565,8 @@
+@@ -560,7 +577,8 @@
        origin_trial_feature_name: "AIProofreaderAPI",
        origin_trial_os: ["win", "mac", "linux", "chromeos"],
        origin_trial_allows_third_party: true,
@@ -73,7 +73,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
        copied_from_base_feature_if: "overridden",
      },
      {
-@@ -563,7 +581,8 @@
+@@ -575,7 +593,8 @@
        origin_trial_feature_name: "AIRewriterAPI",
        origin_trial_os: ["win", "mac", "linux", "chromeos"],
        origin_trial_allows_third_party: true,
@@ -83,7 +83,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
        copied_from_base_feature_if: "overridden",
      },
      {
-@@ -572,6 +591,8 @@
+@@ -584,6 +603,8 @@
      },
      {
        name: "AISummarizationAPI",
@@ -92,7 +92,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
        status: {
          "Win": "stable",
          "Mac": "stable",
-@@ -606,7 +627,8 @@
+@@ -618,7 +639,8 @@
        origin_trial_feature_name: "AIWriterAPI",
        origin_trial_os: ["win", "mac", "linux", "chromeos"],
        origin_trial_allows_third_party: true,
@@ -102,7 +102,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
        copied_from_base_feature_if: "overridden",
      },
      {
-@@ -743,6 +765,8 @@
+@@ -749,6 +771,8 @@
      {
        // Gates the returned accuracyMode parameter upon permissions.query({name: "geolocation"})
        name: "ApproximateGeolocationPermissionAccuracyMode",
@@ -111,7 +111,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
        depends_on: ["ApproximateGeolocationPermission"],
      },
      {
-@@ -1455,7 +1479,7 @@
+@@ -1485,7 +1509,7 @@
        // objects that live on the compositor thread.
        // [1] https://drafts.csswg.org/css-animations-2/#timeline-triggers
        name: "CompositorTimelineTrigger",
@@ -120,7 +120,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
      },
      {
        name: "CompressionDictionaryTransport",
-@@ -1533,6 +1557,8 @@
+@@ -1563,6 +1587,8 @@
        // https://github.com/WICG/controlled-frame/blob/main/README.md for more
        // info.
        name: "ControlledFrame",
@@ -129,7 +129,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
        public: true,
        status: "stable",
      },
-@@ -3008,6 +3034,8 @@
+@@ -3074,6 +3100,8 @@
      },
      {
        name: "ExtensionScriptTagging",
@@ -138,7 +138,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
        public: true,
        status: "stable",
        base_feature: "ExtensionScriptTagging",
-@@ -3141,7 +3169,9 @@
+@@ -3207,7 +3235,9 @@
      },
      {
        name: "FencedFrames",
@@ -149,7 +149,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
        // This helps enable and expose the <fencedframe> element, but note that
        // blink::features::kFencedFrames must be enabled as well, as we require
        // the support of the browser process to fully enable the feature.
-@@ -3237,6 +3267,7 @@
+@@ -3300,6 +3330,7 @@
      {
        // In-development features for the File System Access API.
        name: "FileSystemAccessAPIExperimental",
@@ -157,7 +157,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
        status: "experimental",
      },
      {
-@@ -3251,6 +3282,7 @@
+@@ -3314,6 +3345,7 @@
      {
        // Non-OPFS File System Access API.
        name: "FileSystemAccessLocal",
@@ -165,7 +165,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
        status: {"default": "stable"},
      },
      {
-@@ -4050,6 +4082,8 @@
+@@ -4137,6 +4169,8 @@
      {
        // https://chromestatus.com/feature/5152834368700416
        name: "InstallElement",
@@ -174,7 +174,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
        status: {
          "Android": "",
          "iOS": "",
-@@ -4149,7 +4183,8 @@
+@@ -4242,7 +4276,8 @@
          "Android": "stable",
          "default": "",
        },
@@ -184,7 +184,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
        copied_from_base_feature_if: "overridden",
      },
      {
-@@ -5302,6 +5337,8 @@
+@@ -5406,6 +5441,8 @@
        //
        // It also has some feature params defined throughout the codebase.
        name: "Prerender2",
@@ -193,7 +193,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
        status: "stable",
      },
      {
-@@ -5376,6 +5413,8 @@
+@@ -5473,6 +5510,8 @@
      },
      {
        name: "ProfilerAPI",
@@ -202,7 +202,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
        status: "stable",
      },
      {
-@@ -5518,6 +5557,8 @@
+@@ -5615,6 +5654,8 @@
      // but we still keep this flag for future phase tests.
      {
        name: "ReduceUserAgentMinorVersion",
@@ -211,7 +211,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
        status: "stable",
      },
      {
-@@ -7121,7 +7162,8 @@
+@@ -7268,7 +7309,8 @@
          "ChromeOS": "stable",
          "default": "",
        },
@@ -221,7 +221,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
        copied_from_base_feature_if: "overridden",
      },
      {
-@@ -7309,6 +7351,8 @@
+@@ -7456,6 +7498,8 @@
      },
      {
        name: "UserMediaElement",
@@ -230,7 +230,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
        status: "stable",
        public: true,
      },
-@@ -7451,6 +7495,8 @@
+@@ -7602,6 +7646,8 @@
      {
        // https://chromestatus.com/feature/5183481574850560
        name: "WebAppInstallation",
@@ -239,7 +239,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
        status: {
          "Android": "",
          "iOS": "",
-@@ -7781,6 +7827,7 @@
+@@ -7937,6 +7983,7 @@
        origin_trial_feature_name: "WebMCP",
        origin_trial_allows_third_party: true,
        public: true,
@@ -247,7 +247,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
        base_feature_status: "enabled",
        copied_from_base_feature_if: "overridden",
        // Note that `depends_on` isn't supported by origin trials.
-@@ -7790,7 +7837,7 @@
+@@ -7946,7 +7993,7 @@
          "WebMCPFormAssociatedCustomElements",
          "WebMCPWaitForToolsUntil"
        ],
@@ -256,7 +256,7 @@ index 62c811fd9675eda3821c2d46eacece2cbda9ebe1..3c1a1fbf1e4f5279dcb2f3574ebec0d0
      },
      {
        name: "WebMCPContinuations",
-@@ -8244,5 +8291,10 @@
+@@ -8407,5 +8454,10 @@
        // crbug.com/435623334.
        name: "XSLTSpecialTrial",
      },

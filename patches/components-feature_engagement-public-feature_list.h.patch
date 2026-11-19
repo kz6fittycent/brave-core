@@ -1,5 +1,5 @@
 diff --git a/components/feature_engagement/public/feature_list.h b/components/feature_engagement/public/feature_list.h
-index c86363c9dd8fe357988c16741e0e963cab461725..97d12efdd7902f8d7c415505ace0f39f74e38a0c 100644
+index 365914bbff5ea27dd4f985093af2f8d1d136490a..11fba60c1dfaee27694b33c7e249f96e5a0b1838 100644
 --- a/components/feature_engagement/public/feature_list.h
 +++ b/components/feature_engagement/public/feature_list.h
 @@ -675,12 +675,15 @@ DEFINE_VARIATION_PARAM(kIPHExtensionsPinnedByDefaultFeature,

@@ -1,8 +1,8 @@
 diff --git a/chrome/browser/profiles/chrome_browser_main_extra_parts_profiles.cc b/chrome/browser/profiles/chrome_browser_main_extra_parts_profiles.cc
-index 1887208972a6f0b89b28b40e666434aefbd1b94f..69733333b281cb546106ce981b094f15c5c9a4d2 100644
+index fc66921053751c493c6651f751a72b8369884d9d..57b9f0a6f4dd484638fc63a676bcb6472e8b12b7 100644
 --- a/chrome/browser/profiles/chrome_browser_main_extra_parts_profiles.cc
 +++ b/chrome/browser/profiles/chrome_browser_main_extra_parts_profiles.cc
-@@ -705,7 +705,7 @@ void ChromeBrowserMainExtraPartsProfiles::
+@@ -709,7 +709,7 @@ void ChromeBrowserMainExtraPartsProfiles::
    chromeos_extensions::EnsureBrowserContextKeyedServiceFactoriesBuilt();
  #endif
    extensions::EnsureBrowserContextKeyedServiceFactoriesBuilt();

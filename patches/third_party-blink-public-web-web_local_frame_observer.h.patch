@@ -1,8 +1,8 @@
 diff --git a/third_party/blink/public/web/web_local_frame_observer.h b/third_party/blink/public/web/web_local_frame_observer.h
-index 1928f516dbc3eb8a48399e837d7d34fc4e94317c..8cda9bf1e0775abbcd6f634bed6ad3cc6a9f62cc 100644
+index 8010a0411521d894df507f1d1f52415aed9c06ae..55b9d3adc415209dc5c45c146209a7a611850650 100644
 --- a/third_party/blink/public/web/web_local_frame_observer.h
 +++ b/third_party/blink/public/web/web_local_frame_observer.h
-@@ -28,6 +28,8 @@ class BLINK_EXPORT WebLocalFrameObserver : public base::CheckedObserver {
+@@ -122,6 +122,8 @@ class BLINK_EXPORT WebLocalFrameObserver : public base::CheckedObserver {
    // Retrieves the WebLocalFrame that is being observed. Can be null.
    WebLocalFrame* GetWebLocalFrame() const;
  

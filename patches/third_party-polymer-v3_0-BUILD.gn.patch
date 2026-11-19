@@ -1,5 +1,5 @@
 diff --git a/third_party/polymer/v3_0/BUILD.gn b/third_party/polymer/v3_0/BUILD.gn
-index 7defa0ff4496a6b0185bf80efb3b78fb389f993e..b64bccce3c30620191e7b8acbc9e49fa5091532a 100644
+index 9dd5fd0da254c924008daca3e0e4f60e145a217f..8f3d2975d6c7d9271a7a8d8fe385ba25036caac1 100644
 --- a/third_party/polymer/v3_0/BUILD.gn
 +++ b/third_party/polymer/v3_0/BUILD.gn
 @@ -2,6 +2,7 @@
@@ -19,7 +19,7 @@ index 7defa0ff4496a6b0185bf80efb3b78fb389f993e..b64bccce3c30620191e7b8acbc9e49fa
    js_files += [
      "iron-a11y-announcer/iron-a11y-announcer.js",
      "iron-a11y-keys/iron-a11y-keys.js",
-@@ -132,8 +133,9 @@ ts_library("library") {
+@@ -128,8 +129,9 @@ ts_library("library") {
      "//chrome/test/data/webui/settings:build_ts",
      "//ui/webui/resources/cr_elements:build_ts",
    ]
@@ -30,7 +30,7 @@ index 7defa0ff4496a6b0185bf80efb3b78fb389f993e..b64bccce3c30620191e7b8acbc9e49fa
      visibility += [
        "//ash/webui/*",
        "//chrome/browser/resources/ash/*",
-@@ -204,7 +206,7 @@ ts_library("library") {
+@@ -200,7 +202,7 @@ ts_library("library") {
      "components-chromium/polymer/polymer-legacy.d.ts",
    ]
  

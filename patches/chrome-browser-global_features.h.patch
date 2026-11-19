@@ -1,5 +1,5 @@
 diff --git a/chrome/browser/global_features.h b/chrome/browser/global_features.h
-index 71c24f2345ab2c2dd4a59af4d23441a6090dbe8f..925c813f2115068f814008923664b17b136d3073 100644
+index f89ecc70f489aa15881128df77ba02747a03691a..7a4fa8163c554794a2aec3b22b839f05ebf91ecb 100644
 --- a/chrome/browser/global_features.h
 +++ b/chrome/browser/global_features.h
 @@ -15,6 +15,8 @@
@@ -11,7 +11,7 @@ index 71c24f2345ab2c2dd4a59af4d23441a6090dbe8f..925c813f2115068f814008923664b17b
  #if !BUILDFLAG(IS_ANDROID)
  namespace infobars {
  class BrowserInfoBarManager;
-@@ -285,7 +287,12 @@ class GlobalFeatures {
+@@ -286,7 +288,12 @@ class GlobalFeatures {
  #endif
  #endif
  

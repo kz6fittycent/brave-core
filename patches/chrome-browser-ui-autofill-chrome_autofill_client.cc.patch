@@ -1,8 +1,8 @@
 diff --git a/chrome/browser/ui/autofill/chrome_autofill_client.cc b/chrome/browser/ui/autofill/chrome_autofill_client.cc
-index 9afc7ce950aa90adeb8d1ce94d6849445050c268..b3059399e4656d3cc646ff99841a3ce51527d30a 100644
+index 82750669c502fdbffa5be1bb4efb0a28fa60cd0c..0e24be1b2ff1d5770928e672b42cea511ff28376 100644
 --- a/chrome/browser/ui/autofill/chrome_autofill_client.cc
 +++ b/chrome/browser/ui/autofill/chrome_autofill_client.cc
-@@ -310,6 +310,12 @@ ui::ElementIdentifier GetElementId(AutofillClient::IphFeature iph_feature) {
+@@ -300,6 +300,12 @@ ui::ElementIdentifier GetElementId(AutofillClient::IphFeature iph_feature) {
  // static
  void ChromeAutofillClient::CreateForWebContents(
      content::WebContents* web_contents) {

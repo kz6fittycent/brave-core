@@ -1,5 +1,5 @@
 diff --git a/components/safe_browsing/core/common/features.cc b/components/safe_browsing/core/common/features.cc
-index 4b47a54642f905a52578a480b442f7f3962e37da..4a0ebf87697c1e390925394161ca0db4939ee11d 100644
+index db2a0ba7f5ce7d7803eb7a53c79bf6d63c811656..fb17303f6c524a652d3c9c863a10b15156f8ae31 100644
 --- a/components/safe_browsing/core/common/features.cc
 +++ b/components/safe_browsing/core/common/features.cc
 @@ -41,7 +41,7 @@ BASE_FEATURE(kAdSamplerTriggerFeature,
@@ -11,7 +11,7 @@ index 4b47a54642f905a52578a480b442f7f3962e37da..4a0ebf87697c1e390925394161ca0db4
               base::FEATURE_DISABLED_BY_DEFAULT);
  
  BASE_FEATURE(kAutoRevokeSuspiciousNotification,
-@@ -73,12 +73,9 @@ constexpr base::FeatureParam<std::string> kClientSideDetectionBypassTiersList{
+@@ -70,12 +70,9 @@ constexpr base::FeatureParam<std::string> kClientSideDetectionBypassTiersList{
      &kClientSideDetectionBypassTiers, "ClientSideDetectionBypassTiersList",
      /*default_value=*/""};
  
