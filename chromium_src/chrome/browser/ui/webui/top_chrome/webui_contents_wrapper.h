@@ -14,6 +14,7 @@
 
 class BrowserWindowInterface;
 
+<<<<<<< HEAD
 #define HideCustomContextMenu                                                 \
   HideCustomContextMenu() {}                                                  \
   virtual content::WebContents* AddNewContents_ChromiumImpl(                  \
@@ -40,9 +41,8 @@ class BrowserWindowInterface;
   webui_resizes_host_;                                              \
   std::vector<base::WeakPtr<content::WebContents>> tracked_popups_; \
   base::WeakPtr<BrowserWindowInterface> browser_
+=======
+>>>>>>> 20f9266e7f4 ([wallet] Replace WebUIContentsWrapper popup macros with plaster)
 #include <chrome/browser/ui/webui/top_chrome/webui_contents_wrapper.h>  // IWYU pragma: export
-#undef webui_resizes_host_
-#undef PrimaryPageChanged
-#undef HideCustomContextMenu
 
 #endif  // BRAVE_CHROMIUM_SRC_CHROME_BROWSER_UI_WEBUI_TOP_CHROME_WEBUI_CONTENTS_WRAPPER_H_

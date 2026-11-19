@@ -10,14 +10,8 @@
 #include "chrome/browser/ui/browser_tabstrip.h"
 #include "chrome/browser/ui/browser_window/public/browser_window_interface.h"
 
-// The bubble doesn't allow opening popups, so we redirect new popup content to
-// the browser window via chrome::AddWebContents() (forcing kNewPopup), causing
-// it to open as a separate popup window instead of being suppressed.
-// In order to close all popups we also save tab ids of each opened popup window
-// and close all with the bubble together.
-
-#define AddNewContents AddNewContents_ChromiumImpl
 #include <chrome/browser/ui/webui/top_chrome/webui_contents_wrapper.cc>
+<<<<<<< HEAD
 #undef AddNewContents
 
 void WebUIContentsWrapper::SetWebContentsAddNewContentsBrowser(
@@ -71,3 +65,5 @@ content::WebContents* WebUIContentsWrapper::AddNewContents(
   tracked_popups_.push_back(contents->GetWeakPtr());
   return contents;
 }
+=======
+>>>>>>> 20f9266e7f4 ([wallet] Replace WebUIContentsWrapper popup macros with plaster)
