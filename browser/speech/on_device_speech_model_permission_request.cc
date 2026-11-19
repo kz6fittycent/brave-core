@@ -24,7 +24,6 @@
 namespace speech {
 
 OnDeviceSpeechModelPermissionRequest::OnDeviceSpeechModelPermissionRequest(
-    PrefService& local_state,
     PrefService& profile_prefs,
     const GURL& requesting_origin,
     ConsentCallback callback)
@@ -37,7 +36,6 @@ OnDeviceSpeechModelPermissionRequest::OnDeviceSpeechModelPermissionRequest(
               &OnDeviceSpeechModelPermissionRequest::PermissionDecided,
               base::Unretained(this))),
       callback_(std::move(callback)),
-      local_state_(local_state),
       profile_prefs_(profile_prefs) {
   CHECK(callback_);
 }
@@ -62,12 +60,13 @@ void OnDeviceSpeechModelPermissionRequest::PermissionDecided(
     return;
   }
 
-  if (decision.overall_decision == PermissionDecision::kAllow) {
-    local_state_->SetBoolean(
-        local_ai::prefs::kOnDeviceSpeechEnglishModelEnabled, true);
-  } else if (decision.overall_decision == PermissionDecision::kDeny) {
+  // Only the request that the prompt shows gets the checkbox. A request that
+  // joined the prompt gets the same block without it, so a block without the
+  // checkbox writes nothing, and does not undo the choice of the user.
+  if (decision.overall_decision == PermissionDecision::kDeny &&
+      get_dont_ask_again()) {
     profile_prefs_->SetBoolean(local_ai::prefs::kAskEnableOnDeviceSpeechModel,
-                               !get_dont_ask_again());
+                               false);
   }
   std::move(callback_).Run(decision.overall_decision ==
                            PermissionDecision::kAllow);
