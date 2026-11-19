@@ -116,6 +116,9 @@ OBJC_EXPORT
 
 @property(nonatomic, readonly) bool isBackendLoaded;
 
+/// Whether the AllowDeletingBrowserHistory policy permits deleting history
+@property(nonatomic, readonly) bool isHistoryDeletionAllowed;
+
 - (id<HistoryServiceListener>)addObserver:(id<HistoryServiceObserver>)observer;
 - (void)removeObserver:(id<HistoryServiceListener>)observer;
 

@@ -164,7 +164,13 @@ class HistoryModel: NSObject, ObservableObject {
     }
   }
 
+  /// Whether the AllowDeletingBrowserHistory policy permits deleting history
+  var isDeletionAllowed: Bool {
+    api?.isHistoryDeletionAllowed ?? true
+  }
+
   func delete(nodes: [HistoryNode]) {
+    guard isDeletionAllowed else { return }
     api?.removeHistory(for: nodes)
 
     // Removing a history item should remove its corresponded Recently Closed Item
@@ -183,6 +189,7 @@ class HistoryModel: NSObject, ObservableObject {
   }
 
   func deleteAll() {
+    guard isDeletionAllowed else { return }
     api?.deleteAll { [weak self] in
       guard let self = self else { return }
 

@@ -145,53 +145,9 @@ struct HistoryView: View {
         ForEach(model.items.elements, id: \.key) { section, nodes in
           Section {
             ForEach(nodes, id: \.self) { node in
-              Button {
-                model.handleHistoryItemSelection(.selectTab, node: node)
-              } label: {
-                HistoryItemView(title: node.title, url: node.url, dateAdded: node.dateAdded)
-              }
-              .contextMenu {
-                Section {
-                  Button {
-                    model.handleHistoryItemSelection(.openInNewTab, node: node)
-                  } label: {
-                    Label(Strings.openNewTabButtonTitle, systemImage: "plus.square.on.square")
-                  }
-
-                  if !model.isPrivateBrowsing {
-                    Button {
-                      model.handleHistoryItemSelection(.openInNewPrivateTab, node: node)
-                    } label: {
-                      Label(
-                        Strings.openNewPrivateTabButtonTitle,
-                        systemImage: "plus.square.fill.on.square.fill"
-                      )
-                    }
-                  }
-                }
-                Section {
-                  Button {
-                    model.handleHistoryItemSelection(.copyLink, node: node)
-                  } label: {
-                    Label(Strings.copyLinkActionTitle, systemImage: "doc.on.doc")
-                  }
-                  Button {
-                    model.handleHistoryItemSelection(.shareLink, node: node)
-                  } label: {
-                    Label(Strings.shareLinkActionTitle, systemImage: "square.and.arrow.up")
-                  }
-                }
-                Section {
-                  Button(role: .destructive) {
-                    withAnimation {
-                      model.delete(nodes: [node])
-                    }
-                  } label: {
-                    Label(Strings.History.deleteFromHistory, braveSystemImage: "leo.trash")
-                  }
-                }
-              }
+              historyRow(for: node)
             }
+            .deleteDisabled(!model.isDeletionAllowed)
             .onDelete { indexSet in
               withAnimation {
                 self.delete(indexSet, in: section)
@@ -235,6 +191,7 @@ struct HistoryView: View {
             }
             .labelStyle(.iconOnly)
           }
+          .disabled(!model.isDeletionAllowed)
         }
       }
       .alert(isPresented: $deleteAllAlertPresented) {
@@ -268,6 +225,63 @@ struct HistoryView: View {
           model?.refreshHistory(query: searchText)
         }
       )
+    }
+  }
+
+  @ViewBuilder
+  private func historyRow(for node: HistoryNode) -> some View {
+    Button {
+      model.handleHistoryItemSelection(.selectTab, node: node)
+    } label: {
+      HistoryItemView(title: node.title, url: node.url, dateAdded: node.dateAdded)
+    }
+    .contextMenu {
+      historyContextMenu(for: node)
+    }
+  }
+
+  @ViewBuilder
+  private func historyContextMenu(for node: HistoryNode) -> some View {
+    Section {
+      Button {
+        model.handleHistoryItemSelection(.openInNewTab, node: node)
+      } label: {
+        Label(Strings.openNewTabButtonTitle, systemImage: "plus.square.on.square")
+      }
+
+      if !model.isPrivateBrowsing {
+        Button {
+          model.handleHistoryItemSelection(.openInNewPrivateTab, node: node)
+        } label: {
+          Label(
+            Strings.openNewPrivateTabButtonTitle,
+            systemImage: "plus.square.fill.on.square.fill"
+          )
+        }
+      }
+    }
+    Section {
+      Button {
+        model.handleHistoryItemSelection(.copyLink, node: node)
+      } label: {
+        Label(Strings.copyLinkActionTitle, systemImage: "doc.on.doc")
+      }
+      Button {
+        model.handleHistoryItemSelection(.shareLink, node: node)
+      } label: {
+        Label(Strings.shareLinkActionTitle, systemImage: "square.and.arrow.up")
+      }
+    }
+    if model.isDeletionAllowed {
+      Section {
+        Button(role: .destructive) {
+          withAnimation {
+            model.delete(nodes: [node])
+          }
+        } label: {
+          Label(Strings.History.deleteFromHistory, braveSystemImage: "leo.trash")
+        }
+      }
     }
   }
 
